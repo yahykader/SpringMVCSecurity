@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<!-- thymeleaf est un moteur de  template  
+qui permet de chercher le produit dans le model et inserer dans la vue-->
+<!--  -->
+ <html xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+       layout:decorator="layout"> 
+<head>
+<meta charset="utf-8"/>
+<title>Produits</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+ <link rel="stylesheet" type="text/css" 
+href="../static/css/sytle.css" 
+th:href="@{css/style.css}"/>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container col-md-8  col-md-offset-2">
+
+		<div class="panel-heading">
+			<form th:action="@{/user/index}" method="get">
+				<label> Mot Cle : </label> <input type="text" name="motCle" th:value="${motCle}" />
+				<button class="btn btn-primary" type="submit">Chercher</button>
+			</form>
+		</div>
+		<p>
+		<p>
+	</div>
+	<div class="container col-md-8  col-md-offset-2">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Liste des Produits</div>
+			<div class="panel-body">
+
+				<div>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Designation</th>
+								<th>Prix</th>
+								<th>Quantite</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="p:${listeProduits}">
+								<td th:text="${p.id}"></td>
+								<td th:text="${p.designation}"></td>
+								<td th:text="${p.prix}"></td>
+								<td th:text="${p.quantite}"></td>
+								<td><a th:href="@{/admin/edit(id=${p.id})}">Modifier</a></td>
+								<td><a
+									onclick="return confirm('Etes vous sure de vouloir supprimer')"
+									th:href="@{/admin/delete(id=${p.id},page=${pageCourante},size=${size},motCle=${motCle})}">Supprimer</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div>
+			<ul class="nav nav-pills">
+				<!-- Affiche on un seul ligne -->
+				<li th:class="${pageCourante}==${status.index}?'active':''"
+					th:each="pa,status:${pages}">
+				<a
+					th:href="@{/user/index(page=${status.index},size=${size},motCle=${motCle})}"
+					th:text="${status.index}"></a>
+				<!--  affiche que l'index  --></li>
+			</ul>
+
+		</div>
+	</div>
+</div>	
+</body>
+</html>
